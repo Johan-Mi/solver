@@ -1,0 +1,85 @@
+sprite Stage {
+    costumes {
+        "backdrop": "assets/backdrop.png"
+    }
+}
+
+sprite Main {
+    costumes {
+        "costume": "assets/calculator.jpg"
+    }
+
+    let program = [] as List[String]
+
+    fn when-flag-clicked() {
+        let Δx = 1e-5
+        ask("Expression?")
+        lex(answer())
+        ask("Guess?")
+        let guess = answer().to-num()
+        repeat 10 {
+            let y1 = evaluate(guess)
+            let y2 = evaluate(guess + Δx)
+            &guess = guess + y1 * Δx / (y1 - y2)
+        }
+        say(guess.to-string())
+    }
+
+    fn lex(_ expression: String) {
+        let buffer = ""
+        for i length(expression) {
+            if expression.letter(i) == " " {
+                if not(buffer == "") {
+                    program.push(buffer)
+                }
+                &buffer = ""
+            } else {
+                &buffer = buffer.join(expression.letter(i))
+            }
+        }
+        if not(buffer == "") {
+            program.push(buffer)
+        }
+    }
+
+    fn evaluate(_ x: Num) -> Num {
+        let stack = [] as List[Num]
+        for i length(program) {
+            if program.at(i) == "x" {
+                stack.push(x)
+            } else if program.at(i) == "+" {
+                stack.replace(
+                    index: length(stack) - 1,
+                    with: (stack - 1) + last(stack),
+                )
+                stack.delete-last()
+            } else if program.at(i) == "-" {
+                stack.replace(
+                    index: length(stack) - 1,
+                    with: (stack - 1) - last(stack),
+                )
+                stack.delete-last()
+            } else if program.at(i) == "*" {
+                stack.replace(
+                    index: length(stack) - 1,
+                    with: (stack - 1) * last(stack),
+                )
+                stack.delete-last()
+            } else if program.at(i) == "/" {
+                stack.replace(
+                    index: length(stack) - 1,
+                    with: (stack - 1) / last(stack),
+                )
+                stack.delete-last()
+            } else {
+                stack.push(program.at(i).to-num())
+            }
+        }
+
+        last(stack)
+    }
+
+    inline fn sub(_ comptime list: List[Num], _ index-from-end: Num) -> Num {
+        list.at(length(list) - index-from-end)
+    }
+}
