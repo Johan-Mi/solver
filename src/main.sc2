@@ -52,25 +52,25 @@ sprite Main {
                     index: length(stack) - 1,
                     with: (stack - 1) + last(stack),
                 )
-                stack.delete-last()
+                stack.pop()
             } else if program.at(i) == "-" {
                 stack.replace(
                     index: length(stack) - 1,
                     with: (stack - 1) - last(stack),
                 )
-                stack.delete-last()
+                stack.pop()
             } else if program.at(i) == "*" {
                 stack.replace(
                     index: length(stack) - 1,
                     with: (stack - 1) * last(stack),
                 )
-                stack.delete-last()
+                stack.pop()
             } else if program.at(i) == "/" {
                 stack.replace(
                     index: length(stack) - 1,
                     with: (stack - 1) / last(stack),
                 )
-                stack.delete-last()
+                stack.pop()
             } else {
                 stack.push(program.at(i).to-num())
             }
