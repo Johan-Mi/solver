@@ -11,7 +11,7 @@ sprite Main {
 
     let program = [] as List[String]
 
-    fn when-flag-clicked() {
+    fn when-flag-clicked {
         let Δx = 1e-5
         ask("Expression?")
         lex(answer())
